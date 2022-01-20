@@ -120,19 +120,7 @@
 <script>
     function clickSearchCompany() {
         let company_name = $('#company_name').val();
-
-        var form = document.createElement('form');
-        var objs;
-
-        objs = document.createElement('input');
-        objs.setAttribute('type', 'hidden');
-        objs.setAttribute('name', 'company_name');
-        objs.setAttribute('value', company_name);
-        form.appendChild(objs);
-        form.setAttribute('method', 'post');
-        form.setAttribute('action', "main.html");
-        document.body.appendChild(form);
-        form.submit();
+        location.href = `main.html?q=${company_name}`;
     }
 </script>
 
