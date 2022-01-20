@@ -194,20 +194,19 @@
 							</form>
 						</div><!-- End sidebar search formn-->
 						<h3 class="sidebar-title">회사이름</h3>
-						<div class="sidebar-item">피디정보통신</div>
+						<div class="sidebar-item" id="company_info_name"></div>
 						<h3 class="sidebar-title">회사주소</h3>
-						<div class="sidebar-item">서울시 마포구 아현동 85-54</div>
+						<div class="sidebar-item" id="company_info_address"></div>
 					</div><!-- End sidebar -->
 
 					<div class="company-info-box">
 						<div class="container aos-init aos-animate" data-aos="fade-up">
-
 							<div class="row gy-4">
 								<div class="col-lg-6 col-md-6">
 									<div class="count-box">
 										<i class="bi bi-emoji-smile"></i>
 										<div>
-											<span>4.6</span>
+											<span id="company_info_score"></span>
 											<p>별점</p>
 										</div>
 									</div>
@@ -216,8 +215,7 @@
 									<div class="count-box">
 										<i class="bi bi-journal-richtext"></i>
 										<div>
-											<span data-purecounter-start="0" data-purecounter-end="521"
-												  data-purecounter-duration="2" class="purecounter">521</span>
+											<span id="company_info_review_count"></span>
 											<p>리뷰</p>
 										</div>
 									</div>
@@ -228,8 +226,7 @@
 									<div class="count-box">
                                       <i class="bi bi-question-circle" ></i>
 										<div>
-											<span data-purecounter-start="0" data-purecounter-end="232"
-												  data-purecounter-duration="0" class="purecounter">232</span>
+											<span id="company_info_question_count"></span>
 											<p>질문</p>
 										</div>
 									</div>
@@ -238,8 +235,7 @@
 									<div class="count-box">
                                       <i class="bi bi-bar-chart"></i>
 										<div>
-											<span data-purecounter-start="0" data-purecounter-end="521"
-												  data-purecounter-duration="0" class="purecounter">521</span>
+											<span id="company_info_visit_count"></span>
 											<p>조회</p>
 										</div>
 									</div>
@@ -280,6 +276,10 @@
 		class="bi bi-arrow-up-short"></i></a>
 
 <!-- Vendor JS Files -->
+<script
+		src="https://code.jquery.com/jquery-2.2.4.js"
+		integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
+		crossorigin="anonymous"></script>
 <script src="vendor/purecounter/purecounter.js"></script>
 <script src="vendor/aos/aos.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -290,6 +290,45 @@
 
 <!-- Template Main JS File -->
 <script src="js/main.js"></script>
+<script>
+	$(function() {
+        let company_name = getParam('q');
+        if (company_name == null) {
+            alert('비정상적인 경로로 접근하였습니다')
+			location.href='index.html'
+		}
+
+        $.ajax({
+            type: "GET",
+            url: `http://localhost:8080/companies?q=${company_name}`,
+            success: function (response) {
+				let data = response['data']
+				if (data == null) {
+                    alert('회사 정보가 없습니다')
+                    window.history.back()
+				} else {
+                    console.log(`name : ${data.name}`)
+                    console.log(`address : ${data.address}`)
+                    console.log(`score : ${data.score}`)
+                    console.log(`review_count : ${data.review_count}`)
+                    console.log(`visit_count : ${data.visit_count}`)
+
+                    $('#company_info_name').text(data.name)
+                    $('#company_info_address').text(data.address)
+                    $('#company_info_score').text(data.score)
+                    $('#company_info_review_count').text(data.review_count)
+                    $('#company_info_question_count').text(10)
+                    $('#company_info_visit_count').text(data.visit_count)
+				}
+            }
+        });
+	});
+
+    function getParam(name) {
+        let results = new RegExp('[\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+        return results == null ? null : results[1] || 0;
+    }
+</script>
 </body>
 
 </html>
