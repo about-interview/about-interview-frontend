@@ -293,6 +293,10 @@
 <script>
 	$(function() {
         let company_name = getParam('q');
+        if (company_name == null) {
+            alert('비정상적인 경로로 접근하였습니다')
+			location.href='index.html'
+		}
 
         $.ajax({
             type: "GET",
@@ -321,8 +325,8 @@
 	});
 
     function getParam(name) {
-        var results = new RegExp('[\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
-        return results[1] || 0;
+        let results = new RegExp('[\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+        return results == null ? null : results[1] || 0;
     }
 </script>
 </body>
